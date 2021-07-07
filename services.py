@@ -1,5 +1,7 @@
+from asyncio.windows_events import NULL
 import requests
 import json as js
+from datetime import date
 
 from requests.models import Response
 
@@ -7,18 +9,49 @@ class Anime:
     def __init__(self, url) -> None:
         self.url = url
     
-    def get_list_top_anime(self):
+    def get_list_top_airing_anime(self):
         response = requests.get(self.url+"top/anime/1/airing")
         if response.status_code == 200:
             result ={}
-            result = js.loads(response.content)
+            result = js.loads(response.text)
+            return result.get("top")
+        else:
+            print("Failed to get data")
+
+    def get_list_top_anime_alltime(self):
+        response = requests.get(self.url+"top/anime/1")
+        if response.status_code == 200:
+            result ={}
+            result = js.loads(response.text)
+            return result.get("top")
+        else:
+            print("Failed to get data")
+    
+    def get_list_upcomming_featured(self):
+        response = requests.get(self.url+"season/later")
+        if response.status_code == 200:
+            result ={}
+            result = js.loads(response.text)
             return result.get("top")
         else:
             print("Failed to get data")
 
     def get_next_ss_anime_list(self):
-        response = requests.get(self.url+"season/later")
-        list_of_title = []
+        today = date.today()
+        cur_season = ''
+        spring = [2,3,4]
+        summer = [5,6,7]
+        fall = [8,9,10]
+        winter = [11,12]
+        if today.month in spring:
+            cur_season = 'spring'
+        elif today.month in summer:
+            cur_season = "summer"
+        elif today.month in fall:
+            cur_season = "fall"
+        elif today.month in winter:
+            cur_season = "winter"
+        response = requests.get(self.url+f"season/{today.year}/{cur_season}")
         if (response.status_code == 200):
             result = {}
             result = js.loads(response.text)
@@ -64,5 +97,5 @@ class Anime:
                  
 
 # anime = Anime("https://api.jikan.moe/v3/")
-# new_ss_list = anime.get_info_of_anime(41487)
-# print(new_ss_list)
+# new_ss_list = anime.get_list_top_anime_alltime()
+# print(len(new_ss_list))
