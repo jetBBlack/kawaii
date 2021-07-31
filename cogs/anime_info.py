@@ -14,7 +14,7 @@ class AnimeInfo(commands.Cog):
         self.anime =  Anime(url="https://api.jikan.moe/v3/")
 
     def anime_detail(self, mal_id):
-        detail = self.anime.get_info_of_anime(mal_id)
+        detail = self.anime.get_info_of_anime(mal_id,type='anime')
         detail_embed = discord.Embed(
             title = detail.get("title")+" (_Score_: "+str(detail.get("score"))+")", description =detail.get('title_japanese')+"\n"+"Status: "+ detail.get("status"), color=Colour.dark_gold())
         detail_embed.set_image(url=detail.get("image_url"))
@@ -78,7 +78,7 @@ class AnimeInfo(commands.Cog):
     @commands.command()
     async def s(self, ctx, *,name:str):
         n_name = name.replace(' ', '%')
-        anime = self.anime.get_anime_by_name(n_name)
+        anime = self.anime.search_by_name(n_name, type='anime')
         embed = discord.Embed(title = "KaWaii", color = Colour.from_rgb(255,99,71))
         embed.set_thumbnail(url="https://giffiles.alphacoders.com/262/26208.gif")
         list_of_title = []
@@ -100,7 +100,6 @@ class AnimeInfo(commands.Cog):
                
                 raise ValueError("Request cancelled")
         
-      
         try:
             await self.client.wait_for('message', check = check, timeout=150)
             if the_message.lower().isdigit()==True:
@@ -236,13 +235,15 @@ class AnimeInfo(commands.Cog):
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
-            elif m.content.startswith("k!") or m.content == "cancel":
+            elif m.content == "cancel":
                 C = False
                 raise ValueError("Request cancelled")
+            elif m.content.startswith("k!") or  m.content.startswith("K!"):
+                C = False 
         
         while C:
             try:
-                await self.client.wait_for('message', check = check, timeout=120)
+                await self.client.wait_for('message', check = check, timeout=150)
                 if the_message.lower().isdigit()==True:
                     await ctx.send(embed = self.anime_detail(upcoming[int(the_message)-1].get("mal_id")))
             except asyncio.TimeoutError:
@@ -269,9 +270,11 @@ class AnimeInfo(commands.Cog):
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
-            elif m.content.startswith("k!") or m.content == "cancel":
+            elif m.content == "cancel":
                 C = False
                 raise ValueError("Request cancelled")
+            elif m.content.startswith("k!") or m.content.startswith("K!"):
+                C = False
         
         while C:
             try:

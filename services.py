@@ -103,14 +103,14 @@ class Anime:
         else: 
             print('Failed to get data')
 
-    def get_info_of_anime(self, anime_id):
-        response = requests.get(f"{self.url}anime/{anime_id}")
+    def get_info_of_anime(self, anime_id, type='anime'):
+        response = requests.get(f"{self.url}{type}/{anime_id}")
         if (response.status_code == 200):
             result = {}
             result = js.loads(response.content)
             return result
         else:
-            print('Failed to get data')
+            print('Failed to get data from API')
 
     def get_top_manga(self, type):
         response = requests.get(f"{self.url}top/manga/1/{type}")
@@ -139,14 +139,6 @@ class Anime:
         else:
             print('Failed to get data')
     
-    def get_info_of_character(self, id):
-        response = requests.get(f"{self.url}character/{id}/")
-        if (response.status_code == 200):
-            result = {}
-            result = js.loads(response.content)
-            return result
-        else:
-            print('Failed to get data')
     
 #Test request
 # anime = Anime("https://api.jikan.moe/v3/")
