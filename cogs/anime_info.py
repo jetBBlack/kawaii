@@ -54,23 +54,24 @@ class AnimeInfo(commands.Cog):
         top_embed.add_field(name="See more", value="Type: `k!>>`", inline=True)
         top_embed.add_field(name="See detail", value="Select `[number]` to see detail", inline=True)
         await ctx.send(embed= top_embed)
-        c = True
+
+        C = True
         def check(m):
             global the_message
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
-            elif m.content.startswith("k!") or m.content == "cancel":
-                c = False
+            elif m.content.startswith("k!") or m.content.startswith("K!") or m.content == "cancel":
+                C = False
                 raise ValueError("Request cancelled")
                 
-        while c:
+        while C:
             try:
-                await self.client.wait_for('message', check = check, timeout=30)
+                await self.client.wait_for('message', check = check, timeout=150)
                 if the_message.lower().isdigit()==True:
                     await ctx.send(embed = self.anime_detail(top_anime[int(the_message)-1].get("mal_id")))
             except asyncio.TimeoutError:
-                c = False
+                C = False
                 await ctx.send("Session timeout")
                
 
@@ -89,27 +90,24 @@ class AnimeInfo(commands.Cog):
         embed.add_field(name="See detail", value="Select `[number]` to see detail", inline=True)
         await ctx.send(embed= embed)
 
-        C = True
+        
         def check(m):
             global the_message
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
             elif m.content.startswith("k!") or m.content == "cancel":
-                C = False
+               
                 raise ValueError("Request cancelled")
         
-        while C:
-            try:
-                await self.client.wait_for('message', check = check, timeout=120)
-                if the_message.lower().isdigit()==True:
-                    await ctx.send(embed = self.anime_detail(anime[int(the_message)-1].get("mal_id")))
-                
-            except asyncio.TimeoutError:
-                C = False
-                await ctx.send("`Session timeout`")
+      
+        try:
+            await self.client.wait_for('message', check = check, timeout=150)
+            if the_message.lower().isdigit()==True:
+                await ctx.send(embed = self.anime_detail(anime[int(the_message)-1].get("mal_id")))  
+        except asyncio.TimeoutError:
+            await ctx.send("`Session timeout`")
         
-
     @commands.command()
     async def ss(self,ctx, year, season):
         ss_anime = self.anime.get_anime_list_byYearandSs(season,year)
@@ -125,15 +123,17 @@ class AnimeInfo(commands.Cog):
         ss_embed.add_field(name="See detail", value="Select `[number]` to see detail", inline=True)
         await ctx.send(embed= ss_embed)
 
+        C = True
         def check(m):
             global the_message
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
-            elif m.content.startswith("k!") or m.content == "cancel":
+            elif m.content.startswith("k!") or m.content.startswith("K!") or m.content == "cancel":
+                C = False
                 raise ValueError("Request cancelled")
 
-        while True:
+        while C:
             try:
                 await self.client.wait_for('message', check = check, timeout=120)
                 if the_message.lower().isdigit()==True:
@@ -141,6 +141,7 @@ class AnimeInfo(commands.Cog):
                 elif the_message.isdigit()==False:
                     ctx.send('Invalid number')
             except asyncio.TimeoutError:
+                C = False
                 await ctx.send("Sorry, session timeout")
     
     @commands.command()
@@ -158,15 +159,17 @@ class AnimeInfo(commands.Cog):
         ss_embed.add_field(name="See detail", value="Select `[number]` to see detail", inline=True)
         await ctx.send(embed= ss_embed)
 
+        C = False
         def check(m):
             global the_message
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
             elif m.content.startswith("k!") or m.content == "cancel":
+                C = False
                 raise ValueError("Request cancelled")
 
-        while True:
+        while C:
             try:
                 await self.client.wait_for('message', check = check, timeout=120)
                 if the_message.lower().isdigit()==True:
@@ -174,6 +177,7 @@ class AnimeInfo(commands.Cog):
                 elif the_message.isdigit()==False:
                     ctx.send('Invalid number')
             except asyncio.TimeoutError:
+                C = False
                 await ctx.send("Session timeout")
 
     @commands.command()
@@ -191,15 +195,17 @@ class AnimeInfo(commands.Cog):
         ss_embed.add_field(name="See detail", value="Select `[number]` to see detail", inline=True)
         await ctx.send(embed= ss_embed)
 
+        C = False
         def check(m):
             global the_message
             if m.author == ctx.author and m.content.startswith("k!")==False and m.content !="cancel":
                 the_message = m.content
                 return m.content.isdigit() == True
-            elif m.content.startswith("k!") or m.content == "cancel":
+            elif m.content.startswith("k!") or m.content.startswith("K!") or m.content == "cancel":
+                C = False
                 raise ValueError("Session timeout")
 
-        while True:
+        while C:
             try:
                 await self.client.wait_for('message', check = check, timeout=120)
                 if the_message.lower().isdigit()==True:
@@ -207,6 +213,7 @@ class AnimeInfo(commands.Cog):
                 elif the_message.isdigit()==False:
                     ctx.send('Invalid number')
             except asyncio.TimeoutError:
+                C = False
                 await ctx.send("Session timeout")
     
     @commands.command()

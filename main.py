@@ -41,14 +41,21 @@ async def help(ctx):
         `k!s [name]` - Search anime by name
         `k!sc [character name]` - See infomation of character
         `k!topc` - Show a list of top anime character of all time
-        `k!roll` - Random character card. And channel members can add reactions to this randomly generated card
+        `k!roll` - Random character card. And channel members can add reactions to this randomly generated card. More than 100 favorite
+                    anime characters.
+
+         Example:
+            `k!ss fall 2021` :Show fall 2021 anime list
 
         `season`: [spring, summer, fall, winter], `year_format`: yyyy, `name`:utf-8
-        `[]` = optional and required information
+        `[]` : required information
+        `<>` : optional
         """, inline=False)
     embed.add_field(
         name="GUILD", value="""
-        `kick`, `ban`, `member`
+        `kick`, `ban`, `unban`, `member`, `mute`, `unmute`, `clear`, `ping`
+
+        prefix : `k!` or `K!`
         """)
     
     await ctx.send(embed = embed)

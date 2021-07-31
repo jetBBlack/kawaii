@@ -1,8 +1,6 @@
-from asyncio.windows_events import NULL
 import requests
 import json as js
 from datetime import date
-import numpy as np
 
 class Anime:
     def __init__(self, url) -> None:
@@ -75,7 +73,7 @@ class Anime:
         elif (today.month+3) in winter:
             next_season = "winter"
 
-        if today.month in [10,11, 12]:
+        if today.month in [11, 12]:
             next_year = today.year+1
         else: next_year = today.year
         
@@ -96,17 +94,8 @@ class Anime:
         else: 
             print('Failed to get data')
     
-    def get_anime_by_name(self, name):
-        response = requests.get(f"{self.url}search/anime?q={name}&limit=10")
-        if (response.status_code == 200):
-            result = {}
-            result = js.loads(response.text)
-            return result.get("results")
-        else: 
-            print('Failed to get data')
-    
-    def get_mange_by_name(self, name):
-        response = requests.get(f"{self.url}search/manga?q={name}&limit=10")
+    def search_by_name(self, name, type):
+        response = requests.get(f"{self.url}search/{type}?q={name}&limit=10")
         if (response.status_code == 200):
             result = {}
             result = js.loads(response.content)
@@ -151,15 +140,19 @@ class Anime:
             print('Failed to get data')
     
     def get_info_of_character(self, id):
-        response = requests.get(f"{self.url}character/{id}")
+        response = requests.get(f"{self.url}character/{id}/")
         if (response.status_code == 200):
             result = {}
             result = js.loads(response.content)
             return result
         else:
             print('Failed to get data')
-
+    
+#Test request
 # anime = Anime("https://api.jikan.moe/v3/")
 # new_ss_list = anime.get_list_character_byName("Chtholly")
 # for i in range(len(new_ss_list)):
 #     print(new_ss_list[i].get('name'))
+
+
+

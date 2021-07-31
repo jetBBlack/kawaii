@@ -7,7 +7,7 @@ class AdminCommands(commands.Cog):
     
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def ban(self, ctx, member:discord.Member,*,reason=None):
+    async def kick(self, ctx, member:discord.Member,*,reason=None):
         await member.kick(reason = reason)
         await ctx.send(f"{member} has been kicked.")
 
